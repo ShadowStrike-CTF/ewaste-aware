@@ -1,0 +1,364 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>E-Waste Aware — Dispose Responsibly</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --soil: #1a1208;
+            --bark: #2d1f0e;
+            --moss: #2a3d1c;
+            --leaf: #4a7c2f;
+            --canopy: #6aaa45;
+            --gold: #c9a84c;
+            --sand: #e8d5a3;
+            --cream: #f5f0e8;
+            --rust: #8b3a1a;
+            --mist: rgba(255,255,255,0.06);
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+
+        body {
+            background-color: var(--soil);
+            color: var(--cream);
+            font-family: 'DM Mono', monospace;
+            min-height: 100vh;
+            overflow-x: hidden;
+            background-image:
+                radial-gradient(ellipse at 10% 20%, rgba(42, 61, 28, 0.4) 0%, transparent 50%),
+                radial-gradient(ellipse at 90% 80%, rgba(106, 170, 69, 0.08) 0%, transparent 50%);
+        }
+
+        .noise {
+            position: fixed;
+            inset: 0;
+            opacity: 0.03;
+            background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)'/%3E%3C/svg%3E");
+            pointer-events: none;
+            z-index: 0;
+        }
+
+        .container {
+            max-width: 900px;
+            margin: 0 auto;
+            padding: 60px 24px;
+            position: relative;
+            z-index: 1;
+        }
+
+        header {
+            margin-bottom: 64px;
+        }
+
+        .eyebrow {
+            font-family: 'DM Mono', monospace;
+            font-size: 11px;
+            letter-spacing: 0.3em;
+            text-transform: uppercase;
+            color: var(--canopy);
+            margin-bottom: 16px;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .eyebrow::after {
+            content: '';
+            flex: 1;
+            height: 1px;
+            background: linear-gradient(90deg, var(--canopy), transparent);
+            max-width: 200px;
+        }
+
+        h1 {
+            font-family: 'Syne', sans-serif;
+            font-size: clamp(42px, 8vw, 72px);
+            font-weight: 800;
+            line-height: 0.95;
+            letter-spacing: -0.02em;
+            color: var(--cream);
+            margin-bottom: 24px;
+        }
+
+        h1 span {
+            color: var(--canopy);
+            display: block;
+        }
+
+        .subtitle {
+            font-size: 14px;
+            line-height: 1.8;
+            color: var(--sand);
+            max-width: 520px;
+            opacity: 0.8;
+        }
+
+        .earth-day-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            background: rgba(106, 170, 69, 0.12);
+            border: 1px solid rgba(106, 170, 69, 0.3);
+            padding: 8px 16px;
+            border-radius: 2px;
+            font-size: 11px;
+            letter-spacing: 0.2em;
+            text-transform: uppercase;
+            color: var(--canopy);
+            margin-top: 32px;
+        }
+
+        .section-label {
+            font-size: 10px;
+            letter-spacing: 0.3em;
+            text-transform: uppercase;
+            color: var(--gold);
+            margin-bottom: 24px;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .section-label::before {
+            content: '//';
+            opacity: 0.5;
+        }
+
+        .device-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
+            gap: 2px;
+            margin-bottom: 40px;
+        }
+
+        .device-card {
+            background: var(--mist);
+            border: 1px solid rgba(255,255,255,0.06);
+            padding: 28px 24px;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .device-card::before {
+            content: '';
+            position: absolute;
+            inset: 0;
+            background: linear-gradient(135deg, rgba(106, 170, 69, 0.08), transparent);
+            opacity: 0;
+            transition: opacity 0.2s ease;
+        }
+
+        .device-card:hover {
+            border-color: rgba(106, 170, 69, 0.4);
+            transform: translateY(-2px);
+        }
+
+        .device-card:hover::before {
+            opacity: 1;
+        }
+
+        .device-card.selected {
+            border-color: var(--canopy);
+            background: rgba(106, 170, 69, 0.1);
+        }
+
+        .device-card.selected::after {
+            content: '✓';
+            position: absolute;
+            top: 12px;
+            right: 14px;
+            color: var(--canopy);
+            font-size: 14px;
+        }
+
+        .device-icon {
+            font-size: 32px;
+            margin-bottom: 12px;
+            display: block;
+        }
+
+        .device-name {
+            font-family: 'Syne', sans-serif;
+            font-size: 16px;
+            font-weight: 700;
+            color: var(--cream);
+            margin-bottom: 4px;
+        }
+
+        .device-hint {
+            font-size: 11px;
+            color: var(--sand);
+            opacity: 0.5;
+        }
+
+        input[type="radio"] {
+            display: none;
+        }
+
+        .submit-area {
+            display: flex;
+            align-items: center;
+            gap: 24px;
+            margin-top: 8px;
+        }
+
+        .btn-primary {
+            font-family: 'Syne', sans-serif;
+            font-size: 14px;
+            font-weight: 700;
+            letter-spacing: 0.1em;
+            text-transform: uppercase;
+            color: var(--soil);
+            background: var(--canopy);
+            border: none;
+            padding: 16px 40px;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            clip-path: polygon(8px 0%, 100% 0%, calc(100% - 8px) 100%, 0% 100%);
+        }
+
+        .btn-primary:hover {
+            background: var(--sand);
+            transform: translateY(-1px);
+        }
+
+        .hint-text {
+            font-size: 11px;
+            color: var(--sand);
+            opacity: 0.4;
+        }
+
+        .stats-row {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 2px;
+            margin-top: 80px;
+            padding-top: 40px;
+            border-top: 1px solid rgba(255,255,255,0.06);
+        }
+
+        .stat {
+            padding: 24px;
+            background: var(--mist);
+        }
+
+        .stat-number {
+            font-family: 'Syne', sans-serif;
+            font-size: 32px;
+            font-weight: 800;
+            color: var(--canopy);
+            line-height: 1;
+            margin-bottom: 8px;
+        }
+
+        .stat-label {
+            font-size: 11px;
+            color: var(--sand);
+            opacity: 0.6;
+            line-height: 1.5;
+        }
+
+        .footer {
+            margin-top: 60px;
+            padding-top: 24px;
+            border-top: 1px solid rgba(255,255,255,0.04);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            font-size: 10px;
+            color: var(--sand);
+            opacity: 0.3;
+        }
+
+        .error-msg {
+            background: rgba(139, 58, 26, 0.2);
+            border: 1px solid var(--rust);
+            color: var(--sand);
+            padding: 12px 16px;
+            font-size: 12px;
+            margin-bottom: 24px;
+        }
+
+        @media (max-width: 600px) {
+            .stats-row { grid-template-columns: 1fr; }
+            .device-grid { grid-template-columns: 1fr 1fr; }
+        }
+    </style>
+</head>
+<body>
+    <div class="noise"></div>
+    <div class="container">
+        <header>
+            <div class="eyebrow">Earth Day 2026 — E-Waste Awareness</div>
+            <h1>Before You <span>Bin It.</span></h1>
+            <p class="subtitle">
+                Every device you own contains toxic materials that will contaminate soil and water for decades if disposed of incorrectly.
+                This tool tells you exactly what to do — before and after.
+            </p>
+            <div class="earth-day-badge">
+                🌏 Built for Earth Day · Australia-specific recycling programs
+            </div>
+        </header>
+
+        <form action="/result" method="POST">
+            <div class="section-label">Select your device</div>
+
+            {% if error %}
+            <div class="error-msg">{{ error }}</div>
+            {% endif %}
+
+            <div class="device-grid">
+                {% for key, device in devices.items() %}
+                <label class="device-card" for="device_{{ key }}">
+                    <input type="radio" name="device" id="device_{{ key }}" value="{{ key }}">
+                    <span class="device-icon">{{ device.icon }}</span>
+                    <div class="device-name">{{ device.name }}</div>
+                    <div class="device-hint">Tap to select</div>
+                </label>
+                {% endfor %}
+            </div>
+
+            <div class="submit-area">
+                <button type="submit" class="btn-primary">Get Disposal Guide →</button>
+                <span class="hint-text">Free. No account required.</span>
+            </div>
+        </form>
+
+        <div class="stats-row">
+            <div class="stat">
+                <div class="stat-number">57M</div>
+                <div class="stat-label">tonnes of e-waste generated globally per year</div>
+            </div>
+            <div class="stat">
+                <div class="stat-number">&lt;20%</div>
+                <div class="stat-label">formally recycled. The rest goes to landfill or illegal dumping</div>
+            </div>
+            <div class="stat">
+                <div class="stat-number">$62B</div>
+                <div class="stat-label">worth of recoverable materials discarded annually</div>
+            </div>
+        </div>
+
+        <div class="footer">
+            <span>Built by ShadowStrike (Strategos) for DEV Weekend Challenge — Earth Day 2026 🎃</span>
+            <span>Australia-specific · Data current as of April 2026</span>
+        </div>
+    </div>
+
+    <script>
+        // Visual selection state
+        document.querySelectorAll('.device-card').forEach(card => {
+            card.addEventListener('click', () => {
+                document.querySelectorAll('.device-card').forEach(c => c.classList.remove('selected'));
+                card.classList.add('selected');
+            });
+        });
+    </script>
+</body>
+</html>
