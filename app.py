@@ -48,8 +48,8 @@ DEVICES = {
             },
             {
                 'name': 'Council E-waste Programs',
-                'description': 'Most Australian councils run free e-waste collection events. Check your local council website for dates.',
-                'url': 'https://www.sustainability.vic.gov.au',
+                'description': 'Most Australian councils run free e-waste collection events. Use Recycle Mate to find drop-off points near you.',
+                'url': 'https://recycle-mate.com.au',
                 'covers': 'Most electronic devices'
             },
             {
@@ -318,8 +318,8 @@ DEVICES = {
             },
             {
                 'name': 'Council Bulk Waste Collection',
-                'description': 'Many councils accept TVs and monitors during scheduled bulk waste collections. Check your council website.',
-                'url': 'https://www.sustainability.vic.gov.au',
+                'description': 'Many councils accept TVs and monitors during scheduled bulk waste collections. Use Recycle Mate to find options near you.',
+                'url': 'https://recycle-mate.com.au',
                 'covers': 'Large electronics including TVs'
             }
         ]
